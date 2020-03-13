@@ -10,4 +10,4 @@ BUILD_LIB: i2cdet.o
 		$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-		rm -f *.o *.out
+		rm -f *.o *.out *.a
