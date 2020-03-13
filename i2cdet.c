@@ -1,10 +1,8 @@
 #include <sys/ioctl.h>
 #include <errno.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
-#include <fcntl.h>
 
 
 static __s32 i2c_smbus_access(int file, char read_write, __u8 command, 
@@ -19,9 +17,8 @@ static __s32 i2c_smbus_access(int file, char read_write, __u8 command,
     return ioctl(file, I2C_SMBUS, &args);
 }
 
-int i2c_device_exists(const char* dev, int addr) 
+int i2c_device_exists(int fd, int addr) 
 {
-    int fd = open(dev, O_RDWR);
     if (fd < 0) {
         return -1;
     }

@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <fcntl.h>
 #include "i2cdet.h"
+#include <unistd.h>
 
 #define bool_str(d) d ? "Yes" : "No"
 
@@ -13,7 +15,11 @@ int main(int argc, char* argv[])
     int addr = 0;
     sscanf(argv[2], "%X", &addr);
 
-    printf("Device exists:[%s]\n", i2c_device_exists(argv[1], addr) == 1 ? "Yes" : "No");
+    const char* dev = argv[1];
+    int fd = open(dev, O_RDWR);
 
+    printf("Device exists:[%s]\n", i2c_device_exists(fd, addr) == 1 ? "Yes" : "No");
+    
+    close(fd);
     return 0;
 }
