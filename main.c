@@ -3,12 +3,11 @@
 #include "i2cdet.h"
 #include <unistd.h>
 
-#define bool_str(d) d ? "Yes" : "No"
 
 int main(int argc, char* argv[]) 
 {
     if (argc != 3) {
-        printf("Example usage: ./i2c.out /dev/i2c-0 0x5\n");
+        printf("Example usage: ./i2cdet.out /dev/i2c-0 0x5\n");
         return -1;
     }
 
@@ -18,7 +17,21 @@ int main(int argc, char* argv[])
     const char* dev = argv[1];
     int fd = open(dev, O_RDWR);
 
-    printf("Device exists:[%s]\n", i2c_device_exists(fd, addr) == 1 ? "Yes" : "No");
+    int rc = i2c_device_exists(fd, addr);
+    switch (rc) {
+    case 0:
+        printf("Device with address 0x[%X] does not exist.\n", addr);
+        break;
+    case 1:
+        printf("Device exists.\n");
+        break;
+    case -1:
+        printf("Error opening %s.\n", dev);
+        break;
+    case -2:
+        printf("Error in ioctl slave address.\n");
+        break;
+    }
     
     close(fd);
     return 0;

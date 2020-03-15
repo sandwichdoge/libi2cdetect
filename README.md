@@ -1,6 +1,6 @@
 # libi2cdetect
 
-Detect whether i2c device exists on bus.
+Detect whether an i2c slave device exists on bus based on its address.
 
 ## Cross-compile example for ARMv7
 
