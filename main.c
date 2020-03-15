@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         printf("Error opening %s.\n", dev);
         break;
     case -2:
-        printf("Error in ioctl slave address.\n");
+        printf("Error getting bus functionalities.\n");
         break;
     }
     
