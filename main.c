@@ -31,6 +31,12 @@ int main(int argc, char* argv[])
     case -2:
         printf("Error getting bus functionalities.\n");
         break;
+    case -3:
+        printf("Error setting i2c slave address.\n");
+        break;
+    case -4:
+        printf("I2C bus does not support detection commands. Please check your driver.\n");
+        break;
     }
     
     close(fd);
