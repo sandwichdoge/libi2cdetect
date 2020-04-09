@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
+#include <stdio.h>
 
 
 static __s32 i2c_smbus_access(int file, char read_write, __u8 command, 
@@ -31,6 +32,7 @@ static __s32 i2c_smbus_read_byte(int file)
 
 int i2c_device_exists(int fd, int addr) 
 {
+    enum CMD {CMD_READ, CMD_WRITE};
     if (fd < 0) {
         return -1;
     }
@@ -44,8 +46,14 @@ int i2c_device_exists(int fd, int addr)
         return -3;
     }
 
+    enum CMD cmd = CMD_WRITE;
+    // Special addresses
+    if ((addr >= 0x30 && addr <= 0x37 ) || (addr >= 0x50 && addr <= 0x5f)) {
+        cmd = CMD_READ;
+    }
+
     int rc = 0;
-    if (funcs & I2C_FUNC_SMBUS_QUICK) {
+    if ((cmd == CMD_WRITE) && (funcs & I2C_FUNC_SMBUS_QUICK)) {
         rc = i2c_smbus_access(fd, I2C_SMBUS_WRITE, 0, I2C_SMBUS_QUICK, NULL);
     } else if (funcs & I2C_FUNC_SMBUS_READ_BYTE) {
         rc = i2c_smbus_read_byte(fd);
