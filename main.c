@@ -16,6 +16,9 @@ int main(int argc, char* argv[])
 
     const char* dev = argv[1];
     int fd = open(dev, O_RDWR);
+    if (fd < 0) {
+        printf("Failed to open %s.\n", dev);
+    }
 
     int rc = i2c_device_exists(fd, addr);
     switch (rc) {
